@@ -1,0 +1,29 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Meta and CSS Static Files -->
+  {% include 'app_trucks/includes/files_meta.html' %}
+  {% include 'app_trucks/includes/files_css.html' %}
+</head>
+
+<body>
+
+  <!-- Header -->
+  {% include 'app_trucks/includes/header.html' %}
+
+  <!-- Main Content -->
+  {% block content %}
+
+  {% endblock %}
+
+  <!-- Load Footer -->
+  {% include 'app_trucks/includes/footer.html' %}
+
+  <!-- JS Static Files -->
+  {% include 'app_trucks/includes/files_js.html' %}
+
+</body>
+
+</html>

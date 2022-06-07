@@ -1,0 +1,197 @@
+{%  extends 'app_trucks/includes/main.html' %}
+{% load static %}
+
+{% block content %}
+  
+  <!-- ======= Form Section ======= -->
+  <section id="contact" class="contact pt-5">
+    <div class="container" data-aos="fade-up">
+
+      <!-- Title -->
+      <div class="section-title pb-3">
+        <a id="deliveries_today"></a><h2 >Entregas de Hoy</h2>
+        <p class="pb-2"><strong>{{ request.user.first_name }} {{ request.user.last_name }}!</strong> aquí puedes modificar tus entregas de la jornada.</p>
+      </div>
+
+      <!-- Form -->
+      <div class="row">
+        <div class="col">
+
+            <!-- ERROR MESSAGE -->
+            {% if messages %}
+            <p class="text-muted text-center pt-2">
+              {% for message in messages %}
+                {% if message.message == 'form-errors' %}
+                  <div class="alert alert-danger" role="alert">
+                    <strong>Error. </strong>
+                    Hay errores en el formulario. Por favor, corrija los errores señalados y presione Guardar nuevamente.
+                  </div>
+                {% elif message.message == 'form-saved' %}
+                  <div class="alert alert-success" role="alert">
+                    <strong>Guardado. </strong> Jornada de trabajo guardada correctamente. Haga clic para volver al
+                    <a class="" href="{% url "dashboard" %}" role="button">Panel Principal</a> o revise su
+                  <a class="" href="{% url "workdays" %}" role="button">Listado de Jornadas Trabajadas</a>
+                  </div>
+                {% endif %}
+              {% endfor %}
+            </p>
+            {% endif %}
+
+          <form action="" method="post" role="form">
+          {% csrf_token %}
+
+            <!-- === First Line === -->
+            <div class="form-row">
+
+              <!-- Date Field -->
+              <div class="form-group col-md-4">
+                <label for="id_date" class="pl-2">Fecha de Hoy</label>
+                <input type="date" id="id_date" aria-describedby="date_Help" placeholder="Fecha de Hoy"
+                       class="form-control"
+                       value="{% if f.date.value.isoformat %}{{f.date.value.isoformat}}{% else %}{{f.date.value}}{% endif %}"
+                       name="{{f.date.name}}"
+                       maxlength="{{f.date.maxlength}}">
+              </div>
+
+            </div>
+
+            <!-- === Second Line === -->
+            <div class="form-row">
+
+              <!-- Truck Field -->
+              <div class="form-group col-md-4">
+                <label for="truck_name" class="pl-2">Camión</label>
+                <select id="id_truck" name="truck" class="form-control custom-select
+                  {% for message in messages %}
+                    {% if message.message == 'form-errors' and not f.truck.errors %}
+                      is-valid
+                    {% elif message.message == 'form-errors' and f.truck.errors %}
+                      is-invalid
+                    {% endif %}
+                  {% endfor %}">
+                  {% for id, name in f.fields.truck.choices|slice:"1:" %}
+                    <option value={{ id }}{% if f.truck.value|add:"0" == id %} selected {% endif %} >{{name}}</option>
+                  {% endfor %}
+                </select>
+                <small id="truckHelp" class="form-text text-muted"></small>
+              </div>
+
+            </div>
+
+            <!-- === Third Line === -->
+            <div class="form-row">
+
+              <!-- Ini Mileage Field -->
+              <div class="form-group col-md-4">
+                <label for="id_ini_mileage" class="pl-2">Contador inicial</label>
+                <input type="number" id="id_ini_mileage" aria-describedby="ini_mileageHelp" placeholder="Contador inicial"
+                       class="form-control
+                       {% for message in messages %}
+                           {% if message.message == 'form-errors' and not f.ini_mileage.errors %}
+                              is-valid
+                           {% elif message.message == 'form-errors' and f.ini_mileage.errors %}
+                              is-invalid
+                           {% endif %}
+                       {% endfor %}"
+                       value="{{f.ini_mileage.value|default_if_none:""}}"
+                       name="{{f.ini_mileage.name}}"
+                       maxlength="{{f.ini_mileage.maxlength}}">
+                       {% for message in messages %}
+                           {% if message.message == 'form-errors' and f.ini_mileage.errors %}
+                              <small class="invalid-feedback pb-0">{{f.ini_mileage.errors}}</small>
+                           {% else %}
+                               <small id="ini_mileageHelp" class="form-text text-muted pl-2"></small>
+                           {% endif %}
+                       {% endfor %}
+              </div>
+
+              <!-- End Mileage Field -->
+              <div class="form-group col-md-4">
+                <label for="id_end_mileage" class="pl-2">Contador final</label>
+                <input type="text" id="id_ini_mileage" aria-describedby="end_mileageHelp" placeholder="Contador final"
+                       class="form-control
+                       {% for message in messages %}
+                           {% if message.message == 'form-errors' and not f.end_mileage.errors %}
+                              is-valid
+                           {% elif message.message == 'form-errors' and f.end_mileage.errors %}
+                              is-invalid
+                           {% endif %}
+                       {% endfor %}"
+                       value="{{f.end_mileage.value|default_if_none:""}}"
+                       name="{{f.end_mileage.name}}"
+                       maxlength="{{f.end_mileage.maxlength}}">
+                       {% for message in messages %}
+                           {% if message.message == 'form-errors' and f.end_mileage.errors %}
+                              <small class="invalid-feedback pb-0">{{f.end_mileage.errors}}</small>
+                           {% else %}
+                               <small id="end_mileageHelp" class="form-text text-muted pl-2"></small>
+                           {% endif %}
+                       {% endfor %}
+              </div>
+
+            </div>
+
+            <!-- Separator -->
+            <br>
+            <hr class="mt-0">
+
+            <!-- ====== SET COMPANIES ====== -->
+            <h5 class="pb-2">Tiendas</h5>
+
+            <!-- === Third Line === -->
+            <div class="form-row">
+
+              <!-- Store 1 -->
+              <div class="form-group col-md-4">
+                <label for="store1" class="pl-2">Amazon</label>
+                <div class="input-group mb-0">
+                  <input type="text" class="form-control" value=0 id="store1" placeholder="Amazon" aria-label="Amazon" aria-describedby="store1Help">
+                  <div class="input-group-append">
+                    <span class="input-group-text" id="store1Help"><small>47.00 USD</small></span>
+                  </div>
+                </div>
+                <small id="store1Help" class="form-text text-muted pl-2"></small>
+              </div>
+                   <!-- Store 2 -->
+              <div class="form-group col-md-4">
+                <label for="store2" class="pl-2">Best Buy</label>
+                <div class="input-group mb-0">
+                  <input type="text" class="form-control" value=0 id="store2" placeholder="Best Buy" aria-label="Best Buy" aria-describedby="store2Help">
+                  <div class="input-group-append">
+                    <span class="input-group-text" id="store2Help"><small>52.00 USD</small></span>
+                  </div>
+                </div>
+                <small id="store2Help" class="form-text text-muted pl-2"></small>
+              </div>
+
+              <!-- Store 3 -->
+              <div class="form-group col-md-4">
+                <label for="store3" class="pl-2">Home Depot</label>
+                <div class="input-group mb-0">
+                  <input type="text" class="form-control" value=0 id="store3" placeholder="Home Depot" aria-label="Home Depot" aria-describedby="store3Help">
+                  <div class="input-group-append">
+                    <span class="input-group-text" id="store3Help"><small>48.00 USD</small></span>
+                  </div>
+                </div>
+                <small id="store2Help" class="form-text text-muted pl-2"></small>
+              </div>
+
+            </div>
+
+            <!-- Separator -->
+            <br>
+            <hr class="mt-0 pt-3">
+
+            <button type="submit" class="btn btn-primary px-4" name="save-workday">Guardar</button>
+            <span class="pl-2"></span>
+            <a class="btn btn-secondary" href="{% url "dashboard" %}">Cancelar</a>
+          </form>
+
+        </div>
+
+      </div>
+
+    </div>
+  </section><!-- End Contact Section -->
+
+{% endblock %}

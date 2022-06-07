@@ -1,0 +1,88 @@
+{%  extends 'app_trucks/includes/main.html' %}
+{% load static %}
+
+{% block content %}
+
+{% load event_tags %}
+
+  <!-- ======= Form Section ======= -->
+  <section id="contact" class="contact pt-5">
+    <div class="container" data-aos="fade-up">
+
+      <!-- Title -->
+      <div class="section-title pb-3">
+        <a id="deliveries_today"></a><h2 >Seleccione la Fecha</h2>
+          <!-- Greeting -->
+          <p class="pb-2">
+            <strong>{{ request.user.first_name }} {{ request.user.last_name }}!</strong> selecciona una fecha para la nueva jornada de trabajo.
+          </p>
+      </div>
+
+      <!-- Form -->
+      <div class="row">
+        <div class="col">
+
+            <!-- ERROR MESSAGE -->
+            {% if messages %}
+            <p class="text-muted text-center pt-2">
+              {% for message in messages %}
+                {% if message.message == 'form-errors' %}
+                  <div class="alert alert-danger" role="alert">
+                    <strong>Error. </strong>
+                    Hay errores en el formulario. Por favor, corrija los errores señalados y presione Crear nuevamente.
+                  </div>
+                {% elif message.message == 'form-duplicated' %}
+                  <div class="alert alert-danger" role="alert">
+                    <strong>Error. </strong> El usuario {{ request.user.first_name }} {{ request.user.last_name }} ya tiene una jornada de trabajo para la fecha seleccionada.
+                  </div>
+                {% endif %}
+              {% endfor %}
+            </p>
+            {% endif %}
+
+          <form action="" method="post" role="form">
+          {% csrf_token %}
+
+            <!-- === First Line === -->
+            <div class="form-row">
+
+              <!-- Date Field -->
+              <div class="form-group col-md-4">
+                <label for="id_date" class="pl-2">Seleccione la Fecha de la Entrega</label>
+                <input type="date" id="id_date" aria-describedby="dateHelp" placeholder="Fecha de la Jornada de Trabajo"
+                       class="form-control
+                       {% for message in messages %}
+                           {% if message.message == 'form-duplicated' %}
+                              is-invalid
+                           {% elif message.message == 'form-errors'%}
+                              is-invalid
+                           {% endif %}
+                       {% endfor %}"
+                       value="{{f.date.value}}"
+                       name="date">
+              </div>
+
+            </div>
+
+
+            <!-- Separator -->
+            <br>
+            <hr class="mt-0 pt-3">
+
+            <!-- Submit Buttons -->
+            <button type="submit" class="btn btn-primary px-4" name="select-date">Crear</button>
+
+            <!-- Cancel Buttons -->
+            <span class="pl-2"></span>
+            <a class="btn btn-secondary px-3" href="{% url "dashboard" %}">Ir al Inicio</a>
+
+          </form>
+
+        </div>
+
+      </div>
+
+    </div>
+  </section><!-- End Contact Section -->
+
+{% endblock %}

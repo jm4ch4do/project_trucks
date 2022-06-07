@@ -1,0 +1,134 @@
+{%  extends 'app_trucks/includes/main.html' %}
+{% load static %}
+
+{% block content %}
+
+{% load event_tags %}
+
+    <!-- ======= Form Section ======= -->
+    <section id="contact" class="contact pt-5">
+      <div class="container" data-aos="fade-up">
+
+        <!-- Title -->
+        <div class="section-title pb-4">
+          <a id="deliveries_today"></a><h2 >Jornadas de Trabajo</h2>
+          <strong>{{ request.user.first_name }} {{ request.user.last_name }}</strong>, aquí puedes ver tus últimas 100 jornadas de trabajo.
+        </div>
+
+        <!-- ERROR MESSAGE -->
+        {% if messages %}
+        <p class="text-muted text-center">
+          {% for message in messages %}
+            {% if message.message == 'workday-deleted' %}
+              <div class="alert alert-success alert-dismissible" role="alert">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                <strong>Borrado. </strong> La Jornada de Trabajo fue borrada exitosamente.
+              </div>
+            {% endif %}
+          {% endfor %}
+        </p>
+        {% endif %}
+
+        <!-- Form -->
+        <table class="table table-hover">
+          <thead class="thead thead-light">
+            <tr>
+              <th scope="col">Fecha</th>
+              <th scope="col">Camión</th>
+              <th scope="col">Pago</th>
+              <th scope="col" class="buttons-col">
+                <!-- Show All Button -->
+                <button type="button" class="btn btn-info btn-sm" onclick="showAllRows()">Mostrar Todos</button>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+
+            {% for workday in w %}
+            <tr>
+
+              <td>{{workday.date|weekday_spanish}} {{workday.date|date:'d-m-Y'}} <em>({{workday.date|days_ago}})</em></td>
+
+              <td>{{workday.truck}}</td>
+
+              <td>{{workday.income}}</td>
+
+              <td class="buttons-col">
+
+                <!-- Edit Button -->
+                <a class="btn btn-outline-primary btn-sm" href="{% url 'workday_edit' workday.id %}" role="button">Editar</a>
+
+                <!-- Delete Button with Modal -->
+                <button type="button" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#deleteModal{{forloop.counter0}}">
+                  Borrar
+                </button>
+
+                <!-- Modal for Delete Button -->
+                <form method="POST" class="inline-form" action={% url 'workday_delete' workday.id %}>
+                {% csrf_token %}
+
+                <div class="modal fade" id="deleteModal{{forloop.counter0}}" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel{{forloop.counter0}}" aria-hidden="true">
+                  <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="deleteModalLabel{{forloop.counter0}}">Borrar Jornada {{workday.date|date:'d-m-Y'}}</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div style="text-align: left" class="modal-body">
+                        ¿Está seguro de borrar jornada seleccionada?
+                      </div>
+                      <div class="modal-footer">
+                        <button type="submit" class="btn btn-danger" name="delete-workday">Borrar</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                </form>
+
+                <!-- Hide Row -->
+                <button type="button" class="btn btn-outline-secondary btn-sm" onclick="hideRow({{forloop.counter0}})">
+                  <i class="ri-eye-off-fill"></i>
+                </button>
+
+                <!-- Hide Rows on Top -->
+                <button type="button" class="btn btn-outline-secondary btn-sm" onclick="hideRowsAbove({{forloop.counter0}})">
+                  <i class="ri-arrow-up-s-line"></i>
+                </button>
+
+                <!-- Hide Rows on Bottom -->
+                <button type="button" class="btn btn-outline-secondary btn-sm" onclick="hideRowsBelow({{forloop.counter0}})">
+                  <i class="ri-arrow-down-s-line"></i>
+                </button>
+
+              </td>
+            </tr>
+            {% endfor %}
+
+            <tr id="summary-row">
+              <td></td>
+              <td></td>
+              <td id="summary-value">0</td>
+              <td class="buttons-col">
+              </td>
+            </tr>
+
+          </tbody>
+        </table>
+
+      </div>
+    </section><!-- End Contact Section -->
+
+  </main><!-- End #main -->
+
+  <!-- Summary on payments starts after page upload -->
+  <script type="text/javascript">
+    window.onload = function() {
+      window.onload = sumTable();
+    }
+  </script>
+
+{% endblock %}

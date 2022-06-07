@@ -1,0 +1,248 @@
+{%  extends 'app_trucks/includes/main.html' %}
+{% load static %}
+
+{% block content %}
+
+{% load event_tags %}
+
+  <!-- ======= Form Section ======= -->
+  <section id="contact" class="contact pt-5">
+    <div class="container" data-aos="fade-up">
+
+      <!-- Title -->
+      <div class="section-title pb-3">
+        <a id="deliveries_today"></a><h2 >Entregas del Día</h2>
+          <!-- Greeting -->
+          <p class="pb-2">
+          {% if task == 'create_workday' %}
+            <strong>{{ request.user.first_name }} {{ request.user.last_name }}!</strong> llena este formulario para guardar los datos de una nueva jornada de trabajo.
+          {% elif task == 'edit_workday' %}
+            <strong>{{ request.user.first_name }} {{ request.user.last_name }}!</strong> aquí puedes modificar tus entregas de la jornada.
+          {% endif %}
+          </p>
+      </div>
+
+      <!-- Form -->
+      <div class="row">
+        <div class="col">
+
+            <!-- ERROR MESSAGE -->
+            {% if messages %}
+            <p class="text-muted text-center pt-2">
+              {% for message in messages %}
+                {% if message.message == 'form-errors' %}
+                  <div class="alert alert-danger" role="alert">
+                    <strong>Error. </strong>
+                    Hay errores en el formulario. Por favor, corrija los errores señalados y presione Guardar nuevamente.
+                  </div>
+                {% elif message.message == 'form-saved' %}
+                  <div class="alert alert-success" role="alert">
+                    <strong>Guardado. </strong> Jornada de trabajo guardada correctamente. Haga clic para volver al
+                    <a class="" href="{% url "dashboard" %}" role="button">Panel Principal</a> o revise su
+                  <a class="" href="{% url "workdays" %}" role="button">Listado de Jornadas Trabajadas</a>
+                  </div>
+                {% elif message.message == 'form-duplicated' %}
+                  <div class="alert alert-success" role="alert">
+                    <strong>Error. </strong> El usuario {{ request.user.first_name }} {{ request.user.last_name }} ya tiene una jornada de trabajo creada para la fecha seleccionada.
+                  </div>
+                {% endif %}
+              {% endfor %}
+            </p>
+            {% endif %}
+
+          <form action="" method="post" role="form">
+          {% csrf_token %}
+
+            <!-- === First Line === -->
+            <div class="form-row">
+
+              <!-- Date Field -->
+              <div class="form-group col-md-4">
+                <label for="id_date" class="pl-2">Fecha</label>
+                <input type="date" name="date" readonly id="id_date" aria-describedby="dateHelp" placeholder="Fecha"
+                       class="form-control
+                       {% for message in messages %}
+                           {% if message.message == 'form-duplicated' %}
+                              is-invalid
+                           {% elif message.message == 'form-errors' and not f.date_created.errors %}
+                              is-valid
+                           {% elif message.message == 'form-errors' and f.date_created.errors %}
+                              is-invalid
+                           {% endif %}
+                       {% endfor %}"
+                       value="{{ date }}">
+              </div>
+
+            </div>
+
+            <!-- === Second Line === -->
+            <div class="form-row">
+
+              <!-- Truck Field -->
+              <div class="form-group col-md-4">
+                <label for="truck_name" class="pl-2">Camión</label>
+                <select id="id_truck" name="truck" class="form-control custom-select
+                  {% for message in messages %}
+                    {% if message.message == 'form-errors' and not f.truck.errors %}
+                      is-valid
+                    {% elif message.message == 'form-errors' and f.truck.errors %}
+                      is-invalid
+                    {% endif %}
+                  {% endfor %}">
+                  {% for id, name in f.fields.truck.choices|slice:"1:" %}
+                    <option value={{ id }}{% if f.truck.value|add:"0" == id %} selected {% endif %} >{{name}}</option>
+                  {% endfor %}
+                </select>
+                <small id="truckHelp" class="form-text text-muted"></small>
+              </div>
+
+            </div>
+
+            <!-- === Third Line === -->
+            <div class="form-row">
+
+              <!-- Ini Mileage Field -->
+              <div class="form-group col-md-4">
+                <label for="id_ini_mileage" class="pl-2">Contador inicial</label>
+                <input type="number" id="id_ini_mileage" aria-describedby="ini_mileageHelp" placeholder="Contador inicial"
+                       class="form-control
+                       {% for message in messages %}
+                           {% if message.message == 'form-errors' and not f.ini_mileage.errors %}
+                              is-valid
+                           {% elif message.message == 'form-errors' and f.ini_mileage.errors %}
+                              is-invalid
+                           {% endif %}
+                       {% endfor %}"
+                       value="{{f.ini_mileage.value|default_if_none:""}}"
+                       name="{{f.ini_mileage.name}}"
+                       maxlength="{{f.ini_mileage.maxlength}}">
+                       {% for message in messages %}
+                           {% if message.message == 'form-errors' and f.ini_mileage.errors %}
+                              <small class="invalid-feedback pb-0">{{f.ini_mileage.errors}}</small>
+                           {% else %}
+                               <small id="ini_mileageHelp" class="form-text text-muted pl-2"></small>
+                           {% endif %}
+                       {% endfor %}
+              </div>
+
+              <!-- End Mileage Field -->
+              <div class="form-group col-md-4">
+                <label for="id_end_mileage" class="pl-2">Contador final</label>
+                <input type="number" id="id_end_mileage" aria-describedby="end_mileageHelp" placeholder="Contador final"
+                       class="form-control
+                       {% for message in messages %}
+                           {% if message.message == 'form-errors' and not f.end_mileage.errors %}
+                              is-valid
+                           {% elif message.message == 'form-errors' and f.end_mileage.errors %}
+                              is-invalid
+                           {% endif %}
+                       {% endfor %}"
+                       value="{{f.end_mileage.value|default_if_none:""}}"
+                       name="{{f.end_mileage.name}}"
+                       maxlength="{{f.end_mileage.maxlength}}">
+                       {% for message in messages %}
+                           {% if message.message == 'form-errors' and f.end_mileage.errors %}
+                              <small class="invalid-feedback pb-0">{{f.end_mileage.errors}}</small>
+                           {% else %}
+                               <small id="end_mileageHelp" class="form-text text-muted pl-2"></small>
+                           {% endif %}
+                       {% endfor %}
+              </div>
+
+            </div>
+
+            <!-- Separator -->
+            <br>
+            <hr class="mt-0">
+
+            <!-- ====== SET COMPANIES ====== -->
+            <h5 class="pb-2">Tiendas</h5>
+
+            <!-- === Form Set === -->
+            <div class="form-row">
+
+              {{ fs.management_form }}
+
+              {% for form in fs %}
+
+                <!-- Deliveries for Store -->
+                <div class="form-group col-md-4">
+                  <label for="store1" class="pl-2">{{form.company.value|company_verbose}}</label>
+                  <div class="input-group mb-0">
+                    <input type="number" class="form-control
+                       {% for message in messages %}
+                        {% if message.message == 'form-errors' and not form.amount.errors %}
+                          is-valid
+                        {% elif message.message == 'form-errors' and form.amount.errors %}
+                          is-invalid
+                        {% endif %}
+                       {% endfor %}"
+                       value={{form.amount.value}}
+                       name="deliveries-{{forloop.counter0}}-amount"
+                       id="id_deliveries-{{forloop.counter0}}-amount"
+                       placeholder={{form.amount.value}}
+                       aria-label={{form.amount.value}}
+                       aria-describedby="store{{forloop.counter0}}Help">
+                    <div class="input-group-append">
+                      <span class="input-group-text" id="store{{forloop.counter0}}Help"><small>{{form.pay_rate.value|default_if_none:0}} USD</small></span>
+                    </div>
+                  </div>
+                </div>
+
+
+
+                <!-- Fields with additional data for Deliveries -->
+                <input type="hidden" name="deliveries-{{forloop.counter0}}-company" value={{form.company.value}} id="id_deliveries-{{forloop.counter0}}-company">
+                <input type="hidden" name="deliveries-{{forloop.counter0}}-pay_rate" value={{form.pay_rate.value|default_if_none:0}} id="id_deliveries-{{forloop.counter0}}-pay_rate">
+
+                <!-- Fields for Delete functionality data -->
+                <input type="hidden" name="deliveries-{{forloop.counter0}}-DELETE" id="id_deliveries-{{forloop.counter0}}-DELETE">
+                <input type="hidden" name="deliveries-{{forloop.counter0}}-workday" id="id_deliveries-{{forloop.counter0}}-workday">
+                {% if task == 'create_workday' %}
+                  <input type="hidden" name="deliveries-{{forloop.counter0}}-id" id="id_deliveries-{{forloop.counter0}}-id">
+                {% elif task == 'edit_workday' %}
+                  <input type="hidden" name="deliveries-{{forloop.counter0}}-id" value={{form.id.value}} id="id_deliveries-{{forloop.counter0}}-id">
+                {% endif %}
+
+              {% endfor %}
+
+            </div>
+
+            {% if task == 'edit_workday' %}
+
+            <!-- Separator -->
+            <br>
+            <hr class="mt-0 pt-3">
+
+            <!-- Total -->
+
+            <p>TOTAL : <span id="summary-value">{{income}}</span></p>
+
+            {% endif %}
+
+            <!-- Separator -->
+            <br>
+            <hr class="mt-0 pt-3">
+
+            <!-- Submit Buttons -->
+            {% if task == 'create_workday' %}
+              <button type="submit" class="btn btn-primary px-4" name="create-workday">Guardar</button>
+            {% elif task == 'edit_workday' %}
+              <button type="submit" class="btn btn-primary px-4" name="edit-workday">Guardar</button>
+            {% endif %}
+
+            <!-- Cancel Buttons -->
+            <span class="pl-2"></span>
+            <a class="btn btn-secondary px-3" href="{% url "dashboard" %}">Ir al Inicio</a>
+            <span class="pl-2"></span>
+            <a class="btn btn-secondary" href="{% url "workdays" %}">Ir al Listado de Jornadas</a>
+          </form>
+
+        </div>
+
+      </div>
+
+    </div>
+  </section><!-- End Contact Section -->
+
+{% endblock %}

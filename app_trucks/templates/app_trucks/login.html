@@ -1,0 +1,64 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>Trucks - Login</title>
+
+  <!-- CSS Static Files -->
+  {% include 'app_trucks/includes/files_css.html' %}
+
+  <!-- Template Main CSS File -->
+  <link href="{% static 'files/css/login.css' %}"  rel="stylesheet">
+
+</head>
+
+<body>
+  <div class="container">
+    <div class="row">
+
+      <div class="col-sm-9 col-md-7 col-lg-5 mx-auto pt-5">
+        <div class="card card-signin my-5">
+          <div class="card-body">
+
+            <h5 class="card-title text-center">Bienvenido al Sistema <strong>Trucks</strong></h5>
+
+            <form method="POST" action="" class="form-signin">
+              {% csrf_token %}
+
+              <div class="form-label-group">
+                <input type="text" id="username" name="username" class="form-control" placeholder="" autofocus>
+                <label for="username">Usuario</label>
+              </div>
+
+              <div class="form-label-group">
+                <input type="password" id="password" name="password" class="form-control" placeholder="">
+                <label for="password">Contraseña</label>
+              </div>
+
+              <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit" name="log-user">Entrar</button>
+
+              <hr class="my-4">
+          </form>
+
+          <!-- ERROR MESSAGE -->
+          {% if messages %}
+            <p class="text-muted text-center pt-2">
+              {% for message in messages %}
+                <span class="text-danger">{{ message }}</span>
+              {% endfor %}
+            </p>
+          {% endif %}
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</body>
+  
+</html>

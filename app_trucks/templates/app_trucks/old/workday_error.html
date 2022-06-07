@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>Trucks - Jornada de Hoy</title>
+  <meta content="" name="descriptison">
+  <meta content="" name="keywords">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="dist/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="dist/remixicon/remixicon.css" rel="stylesheet"> <!-- arrow icon "Go To Top" -->
+  <link href="dist/boxicons/css/boxicons.min.css" rel="stylesheet"> <!-- icon for main categories -->
+
+  <!-- Template Main CSS File -->
+  <link href="files/css/style.css" rel="stylesheet">
+  <link href="files/css/main.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+  <!-- ======= Header ======= -->
+  <header id="header" class="">
+    <div class="container d-flex align-items-center">
+      
+      <!-- Logo -->
+      <a href="../dashboard.html" class="logo mr-auto"><img src="files/img/logo_plano.png" alt="" class="img-fluid"></a>
+      
+      <!-- Header Rigth Menu -->
+      <nav class="navbar navbar-expand">
+        <ul class="navbar-nav pr-2">
+            <li class="nav-item"><a class="nav-link" href="workdays.html>Jornadas</a></li>
+            <li class="nav-item"><a class="nav-link" href="reports.html">Reportes</a></li>
+        </ul>
+        <a class="btn btn-outline-secondary" href="#">Log-Out</a>
+      </nav>
+
+    </div>
+  </header><!-- End Header -->
+  
+  <main id="main">
+    
+    <!-- ======= Form Section ======= -->
+    <section id="contact" class="contact pt-5">
+      <div class="container" data-aos="fade-up">
+
+        <!-- Title -->
+        <div class="section-title pb-3">
+          <a id="deliveries_today"></a><h2 >Entregas de Hoy</h2>
+          <p class="pb-2"><strong>Juan Mercado</strong> aún no haz llenado las entregas de hoy. Si deseas hacerlo llena este formulario.</p>
+          <div class="alert alert-danger pt-2 pb-2" role="alert">
+          <small class="">Hay errores en el formulario. Por favor, corrija los errores señalados.</small>
+          </div>
+        </div>
+        
+        <!-- Form -->
+        <div class="row">
+          <div class="col">
+            <form action="" method="post" role="form">
+
+              <!-- === First Line === -->
+              <div class="form-row">
+                
+                <!-- Date Field -->
+                <div class="form-group col-md-4">
+                  <label for="date_created" class="pl-2">Fecha de Hoy</label>
+                  <input type="date" class="form-control is-valid" readonly id="date_created" aria-describedby="date_createdHelp" placeholder="Fecha de la Jornada" value="2020-08-13">
+                  <small id="date_createdHelp" class="form-text text-muted pl-2"></small>
+                </div>
+                
+              </div>
+
+              <!-- === Second Line === -->
+              <div class="form-row">
+
+                <!-- Truck Field -->
+                <div class="form-group col-md-4">
+                  <label for="truck_name" class="pl-2">Camión</label>
+                  <select class="form-control is-valid" id="truck_name" placeholder="Camión">
+                    <option>Blue Truck</option>
+                    <option>Green Truck</option>
+                    <option>Red Truck</option>
+                  </select>
+                  <small id="truck_nameHelp" class="form-text text-muted"></small>
+                </div>
+                
+              </div>
+
+              <!-- === Third Line === -->
+              <div class="form-row">
+
+                <!-- Starting Mileage Field -->
+                <div class="form-group col-md-4">
+                  <label for="ini_mileage" class="pl-2">Contador inicial</label>
+                  <input type="text" class="form-control is-valid" value=123 id="ini_mileage" aria-describedby="ini_mileageHelp" placeholder="Contador Inicial">
+                  <small id="ini_mileageHelp" class="form-text text-muted pl-2"></small>
+                </div>
+
+                <!-- Ending Mileage Field -->
+                <div class="form-group col-md-4">
+                  <label for="end_mileage" class="pl-2">Contador final</label>
+                  <input type="text" class="form-control is-invalid" value="abc" id="end_mileage" aria-describedby="end_mileageHelp" placeholder="Contador Final">
+                  <small id="end_mileageHelp" class="form-text text-muted pl-2"></small>
+                  <small class="invalid-feedback pl-2">Debe proporciona valores numéricos</small>
+                </div>
+              </div>
+
+              <!-- Separator -->
+              <br>
+              <hr class="mt-0">
+
+              <!-- ====== SET COMPANIES ====== -->
+              <h5 class="pb-2">Tiendas</h5>
+
+              <!-- === Third Line === -->
+              <div class="form-row">
+
+                <!-- Store 1 -->
+                <div class="form-group col-md-4">
+                  <label for="store1" class="pl-2">Amazon</label>
+                  <div class="input-group mb-0">
+                    <input type="text" class="form-control is-valid" value=5 id="store1" placeholder="Amazon" aria-label="Amazon" aria-describedby="store1Help">
+                    <div class="input-group-append">
+                      <span class="input-group-text" id="store1Help"><small>47.00 USD</small></span>
+                    </div>
+                  </div>
+                  <small id="store1Help" class="form-text text-muted pl-2"></small>
+                </div>
+
+                <!-- Store 2 -->
+                <div class="form-group col-md-4">
+                  <label for="store2" class="pl-2">Best Buy</label>
+                  <div class="input-group mb-0">
+                    <input type="text" class="form-control is-valid" value=10 id="store2" placeholder="Best Buy" aria-label="Best Buy" aria-describedby="store2Help">
+                    <div class="input-group-append">
+                      <span class="input-group-text" id="store2Help"><small>52.00 USD</small></span>
+                    </div>
+                  </div>
+                  <small id="store2Help" class="form-text text-muted pl-2"></small>
+                </div>
+
+                <!-- Store 3 -->
+                <div class="form-group col-md-4">
+                  <label for="store3" class="pl-2">Home Depot</label>
+                  <div class="input-group mb-0">
+                    <input type="text" class="form-control is-valid" value=8 id="store3" placeholder="Home Depot" aria-label="Home Depot" aria-describedby="store3Help">
+                    <div class="input-group-append">
+                      <span class="input-group-text" id="store3Help"><small>48.00 USD</small></span>
+                    </div>
+                  </div>
+                  <small id="store2Help" class="form-text text-muted pl-2"></small>
+                </div>
+
+              </div>
+
+              <!-- Separator -->
+              <br>
+              <hr class="mt-0 pt-3">
+
+              <!-- Buttons -->
+              <a class="btn btn-primary" href="workday_edit.html">Guardar</a>
+              <span class="pl-2"></span>
+              <a class="btn btn-secondary" href="../dashboard.html">Cancelar</a>
+
+            </form>
+
+          </div>
+
+        </div>
+
+      </div>
+    </section><!-- End Contact Section -->
+
+  </main><!-- End #main -->
+
+  <!-- ======= Footer ======= -->
+  <footer id="footer">
+    <div class="container d-md-flex py-4">
+      <div class="mr-md-auto text-center text-md-left">
+        <div class="credits">
+          Original Design <a href="https://bootstrapmade.com/">BootstrapMade</a>
+        </div>
+      </div>
+    </div>
+  </footer><!-- End Footer -->
+
+  <!-- Go to Top Arrow -->
+  <!-- 
+  <a href="#" class="back-to-top"><i class="ri-arrow-up-line"></i></a>
+  <div id="preloader"></div>
+  -->
+
+
+  <!----------------------------------------------------------------------------------->
+  <!-- SCRIPTS -->
+  <!----------------------------------------------------------------------------------->
+
+  <!-- Vendor JS Files -->
+  <script src="dist/jquery/jquery.min.js"></script>
+  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Template Main JS File -->
+  <script src="files/js/main.js"></script>
+
+</body>
+
+</html>

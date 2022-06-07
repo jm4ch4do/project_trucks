@@ -1,0 +1,19 @@
+{% load static %}
+<!-- ======= Header ======= -->
+  <header id="header" class="">
+    <div class="container d-flex align-items-center">
+
+      <!-- Logo -->
+      <a href="{% url "dashboard" %}" class="logo mr-auto"><img src="{% static "files/img/logo_plano.png" %}" alt="" class="img-fluid"></a>
+
+      <!-- Header Rigth Menu -->
+      <nav class="navbar navbar-expand">
+        <ul class="navbar-nav pr-2">
+            <li class="nav-item"><a class="nav-link" href="{% url "workdays" %}">Jornadas</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url "reports" %}">Reportes</a></li>
+        </ul>
+        <a class="btn btn-outline-secondary" href="{% url "logout" %}">Log-Out</a>
+      </nav>
+
+    </div>
+  </header><!-- End Header -->

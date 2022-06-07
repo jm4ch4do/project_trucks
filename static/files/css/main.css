@@ -1,0 +1,56 @@
+/**
+* Purpose: Fixes for adaptation of template to Trucks System
+* Author: José Raúl Machado Fernández
+*/
+
+/*--------------------------------------------------------------
+# FIXES TO WORKDAYS
+--------------------------------------------------------------*/
+body {
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+    font-size: 1rem;
+    font-weight: 400;
+}
+
+/* Change Nav-Bar link color */
+.section-title p {
+    color: #2f2e2e;
+}
+
+/* Change table title and rows color */
+.table thead {
+    color: #444444;
+    text-align: center;
+}
+
+.table td {
+    color: #555555;
+    text-align: center;
+}
+
+/* Align columns with buttons to the right */
+.table .buttons-col{
+    text-align: right;
+}
+
+/* Remove hover from last row of table */
+#summary-row:hover{
+    background-color: #ffffff00;
+}
+
+/* Table summary is green and bold */
+#summary-value{
+    color: #259A40;
+    font-weight: bold;
+}
+
+/* form will start in the same line */
+.inline-form {
+     display:inline;
+}
+
+/* emphasis will be gray */
+em {
+     color: gray;
+}
+
